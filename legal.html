@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal - @Vararies</title>
+    <link rel="stylesheet" href="bin/system.css">
+    <style>
+        /* Additional styles for the legal page */
+        .legal-container {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+            width: 90%;
+            max-width: 800px;
+            margin: 2rem auto;
+            color: #f5f5f5;
+            text-align: left;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .legal-container h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif;
+            font-weight: 400;
+            color: #f5f5f5;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+        
+        .legal-container h2 {
+            font-family: 'Georgia', serif;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #f5f5f5;
+            font-size: 1.4rem;
+        }
+        
+        .legal-container h3 {
+            font-family: 'Georgia', serif;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #f5f5f5;
+            font-size: 1.2rem;
+        }
+        
+        .legal-container p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .legal-container ul, .legal-container ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .legal-container li {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.5);
+            color: #ccc;
+            font-weight: bold;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+            transition: .2s all;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+        
+        .back-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .last-updated {
+            text-align: center;
+            font-style: italic;
+            margin-top: 2rem;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Scrollbar styling for webkit browsers */
+        .legal-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .legal-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        .legal-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        
+        .legal-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="legal-container">
+        <h1>Legal Information</h1>
+        
+        <div class="section">
+            <h2>Terms of Service</h2>
+            <p>By using @Vararies URL Shortener, you agree to the following terms and conditions:</p>
+            
+            <h3>1. Acceptable Use</h3>
+            <p>You agree not to use our service for:</p>
+            <ul>
+                <li>Malicious or harmful activities</li>
+                <li>Spamming or phishing</li>
+                <li>Distributing malware or viruses</li>
+                <li>Promoting illegal activities</li>
+                <li>Violating intellectual property rights</li>
+                <li>Any activity that could harm our service or infrastructure</li>
+            </ul>
+            
+            <h3>2. Service Availability</h3>
+            <p>We strive to maintain high availability but do not guarantee uninterrupted service. We reserve the right to modify or discontinue the service at any time without notice.</p>
+            
+            <h3>3. Content Responsibility</h3>
+            <p>You are solely responsible for the URLs you shorten and the content they lead to. We are not liable for any damages resulting from shortened URLs or their destinations.</p>
+            
+            <h3>4. Termination</h3>
+            <p>We reserve the right to suspend or terminate access to our service for any user who violates these terms.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Privacy Policy</h2>
+            
+            <h3>1. Information We Collect</h3>
+            <p>When you use our service, we may collect:</p>
+            <ul>
+                <li>URLs you submit for shortening</li>
+                <li>IP addresses for security and analytics</li>
+                <li>Browser information and device type</li>
+                <li>Usage patterns and click statistics</li>
+            </ul>
+            
+            <h3>2. How We Use Your Information</h3>
+            <p>We use collected information to:</p>
+            <ul>
+                <li>Provide and improve our service</li>
+                <li>Monitor for abuse and security threats</li>
+                <li>Generate anonymous analytics</li>
+                <li>Comply with legal obligations</li>
+            </ul>
+            
+            <h3>3. Data Sharing</h3>
+            <p>We do not sell your personal information. We may share data:</p>
+            <ul>
+                <li>With third-party service providers necessary for our operations</li>
+                <li>When required by law or to protect our rights</li>
+                <li>In aggregated, anonymized form for analytics</li>
+            </ul>
+            
+            <h3>4. Cookies</h3>
+            <p>We use minimal cookies for functionality and analytics. You can disable cookies in your browser settings, though this may affect service functionality.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Copyright and Intellectual Property</h2>
+            
+            <h3>1. Our Content</h3>
+            <p>All website content, including but not limited to text, graphics, logos, and code, is the property of @Vararies and protected by copyright laws.</p>
+            
+            <h3>2. User Content</h3>
+            <p>By submitting URLs to our service, you affirm that you have the right to share those URLs and that they do not infringe on any third-party rights.</p>
+            
+            <h3>3. DMCA Compliance</h3>
+            <p>We respect intellectual property rights. If you believe content accessible through our service infringes your copyright, please contact us with:</p>
+            <ul>
+                <li>Identification of the copyrighted work</li>
+                <li>Identification of the infringing material</li>
+                <li>Your contact information</li>
+                <li>A statement of good faith belief</li>
+                <li>A statement under penalty of perjury</li>
+                <li>Your electronic signature</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Disclaimer of Warranties</h2>
+            <p>Our service is provided "as is" without warranties of any kind, either express or implied. We do not guarantee that the service will be error-free or uninterrupted.</p>
+            
+            <h2>Limitation of Liability</h2>
+            <p>To the fullest extent permitted by law, @Vararies shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use of the service.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Governing Law</h2>
+            <p>These terms shall be governed by and construed in accordance with the laws of the jurisdiction in which @Vararies operates, without regard to its conflict of law provisions.</p>
+            
+            <h2>Changes to Terms</h2>
+            <p>We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of the modified terms.</p>
+        </div>
+        
+        <div class="last-updated">
+            Last updated: October 2023
+        </div>
+        
+        <a href="index.html" class="back-btn">Back to Shortener</a>
+    </div>
+</body>
+</html>

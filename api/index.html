@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        h3 {
+            color: #34495e;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .endpoint {
+            background: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: #3498db;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .method.get { background: #27ae60; }
+        .method.post { background: #2980b9; }
+        .method.put { background: #f39c12; }
+        .method.delete { background: #e74c3c; }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links a {
+            color: #3498db;
+            text-decoration: none;
+            padding: 0.5rem;
+            display: block;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #ecf0f1;
+        }
+
+        .api-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .api-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .api-card h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status.free { background: #d4edda; color: #155724; }
+        .status.paid { background: #fff3cd; color: #856404; }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .legal-notice {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .api-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>URL Shortener API</h1>
+            <p class="subtitle">Comprehensive documentation for our URL shortening service</p>
+            <p>Free, reliable, and easy-to-use URL shortening API</p>
+        </header>
+
+        <div class="main-content">
+            <div class="content">
+                <section id="overview">
+                    <h2>Overview</h2>
+                    <p>Our URL Shortener API provides a simple and efficient way to shorten long URLs using multiple reliable services. The API automatically tries different shortening services until it finds one that works.</p>
+                    
+                    <div class="warning">
+                        <strong>Important:</strong> This API is provided as-is for educational and development purposes. Always respect rate limits and terms of service for individual shortening services.
+                    </div>
+                </section>
+
+                <section id="quick-start">
+                    <h2>Quick Start</h2>
+                    <p>To shorten a URL, simply make a GET request to our API endpoint with the URL you want to shorten:</p>
+                    
+                    <div class="code-block">
+// Basic usage
+fetch('/shorten?url=https://example.com/very/long/url')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.shortUrl);
+    });
+                    </div>
+                </section>
+
+                <section id="endpoints">
+                    <h2>API Endpoints</h2>
+
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <strong>/shorten</strong>
+                        <p>Shorten a URL using available services</p>
+                        
+                        <h3>Parameters:</h3>
+                        <table>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                            <tr>
+                                <td>url</td>
+                                <td>string</td>
+                                <td>Yes</td>
+                                <td>The URL to shorten (must include http:// or https://)</td>
+                            </tr>
+                        </table>
+
+                        <h3>Response:</h3>
+                        <div class="code-block">
+{
+    "success": true,
+    "shortUrl": "https://short.url/abc123",
+    "originalUrl": "https://example.com/very/long/url",
+    "service": "TinyURL"
+}
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <strong>/services</strong>
+                        <p>Get list of available shortening services</p>
+                        
+                        <h3>Response:</h3>
+                        <div class="code-block">
+{
+    "services": [
+        {
+            "name": "TinyURL",
+            "status": "active",
+            "requiresKey": false
+        },
+        // ... more services
+    ]
+}
+                        </div>
+                    </div>
+                </section>
+
+                <section id="supported-services">
+                    <h2>Supported Services</h2>
+                    <p>Our API automatically tries these services in order until a successful shortening is achieved:</p>
+                    
+                    <div class="api-list">
+                        <div class="api-card">
+                            <h4>TinyURL <span class="status free">Free</span></h4>
+                            <p>Reliable and well-established URL shortener</p>
+                        </div>
+                        <div class="api-card">
+                            <h4>Shrtcode <span class="status free">Free</span></h4>
+                            <p>Fast and consistent shortening service</p>
+                        </div>
+                        <div class="api-card">
+                            <h4>Is.gd <span class="status free">Free</span></h4>
+                            <p>Simple and privacy-focused URL shortener</p>
+                        </div>
+                        <div class="api-card">
+                            <h4>CleanURI <span class="status free">Free</span></h4>
+                            <p>Clean and straightforward API</p>
+                        </div>
+                        <div class="api-card">
+                            <h4>1pt.co <span class="status free">Free</span></h4>
+                            <p>Modern URL shortening service</p>
+                        </div>
+                        <!-- Add more services as needed -->
+                    </div>
+                </section>
+
+                <section id="usage-examples">
+                    <h2>Usage Examples</h2>
+
+                    <h3>JavaScript</h3>
+                    <div class="code-block">
+async function shortenUrl(longUrl) {
+    try {
+        const response = await fetch(`/shorten?url=${encodeURIComponent(longUrl)}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            return data.shortUrl;
+        } else {
+            throw new Error(data.error || 'Failed to shorten URL');
+        }
+    } catch (error) {
+        console.error('Error shortening URL:', error);
+        return null;
+    }
+}
+
+// Usage
+const shortUrl = await shortenUrl('https://example.com/very/long/path');
+console.log(shortUrl);
+                    </div>
+
+                    <h3>Python</h3>
+                    <div class="code-block">
+import requests
+
+def shorten_url(long_url):
+    try:
+        response = requests.get(
+            'http://your-domain.com/shorten',
+            params={'url': long_url}
+        )
+        data = response.json()
+        
+        if data.get('success'):
+            return data['shortUrl']
+        else:
+            raise Exception(data.get('error', 'Failed to shorten URL'))
+    except Exception as e:
+        print(f'Error shortening URL: {e}')
+        return None
+
+# Usage
+short_url = shorten_url('https://example.com/very/long/path')
+print(short_url)
+                    </div>
+
+                    <h3>cURL</h3>
+                    <div class="code-block">
+curl "http://your-domain.com/shorten?url=https://example.com/very/long/url"
+                    </div>
+                </section>
+
+                <section id="error-handling">
+                    <h2>Error Handling</h2>
+                    <p>The API returns standard HTTP status codes and detailed error messages:</p>
+                    
+                    <table>
+                        <tr>
+                            <th>Status Code</th>
+                            <th>Meaning</th>
+                            <th>Possible Solution</th>
+                        </tr>
+                        <tr>
+                            <td>200</td>
+                            <td>Success</td>
+                            <td>URL shortened successfully</td>
+                        </tr>
+                        <tr>
+                            <td>400</td>
+                            <td>Bad Request</td>
+                            <td>Check URL format and parameters</td>
+                        </tr>
+                        <tr>
+                            <td>500</td>
+                            <td>Internal Server Error</td>
+                            <td>Try again later or contact support</td>
+                        </tr>
+                        <tr>
+                            <td>503</td>
+                            <td>Service Unavailable</td>
+                            <td>All shortening services are currently down</td>
+                        </tr>
+                    </table>
+
+                    <h3>Error Response Format:</h3>
+                    <div class="code-block">
+{
+    "success": false,
+    "error": "Invalid URL format",
+    "code": 400
+}
+                    </div>
+                </section>
+
+                <section id="legal">
+                    <h2>Legal & Compliance</h2>
+                    <div class="legal-notice">
+                        <strong>Legal Notice:</strong> By using this API, you agree to comply with all applicable laws and regulations. You must not use this service for malicious, illegal, or abusive purposes.
+                    </div>
+
+                    <h3>Prohibited Activities</h3>
+                    <ul>
+                        <li>Spamming or bulk URL shortening without permission</li>
+                        <li>Shortening URLs to malicious or phishing sites</li>
+                        <li>Circumventing rate limits or terms of service</li>
+                        <li>Commercial abuse without proper licensing</li>
+                        <li>Any illegal activities as defined by applicable laws</li>
+                    </ul>
+
+                    <h3>Rate Limiting</h3>
+                    <p>To ensure fair usage and service stability, rate limiting is implemented. Excessive requests may result in temporary or permanent access restrictions.</p>
+
+                    <h3>Privacy</h3>
+                    <p>We respect user privacy. URLs and usage data are handled in accordance with our privacy policy. However, note that individual shortening services may have their own privacy policies.</p>
+
+                    <p>For complete legal terms, please visit: <a href="https://docs.favnc.pages.dev/" target="_blank">https://docs.favnc.pages.dev/</a></p>
+                </section>
+            </div>
+
+            <div class="sidebar">
+                <h3>Navigation</h3>
+                <ul class="nav-links">
+                    <li><a href="#overview">Overview</a></li>
+                    <li><a href="#quick-start">Quick Start</a></li>
+                    <li><a href="#endpoints">API Endpoints</a></li>
+                    <li><a href="#supported-services">Supported Services</a></li>
+                    <li><a href="#usage-examples">Usage Examples</a></li>
+                    <li><a href="#error-handling">Error Handling</a></li>
+                    <li><a href="#legal">Legal & Compliance</a></li>
+                </ul>
+
+                <h3>Quick Links</h3>
+                <ul class="nav-links">
+                    <li><a href="https://docs.favnc.pages.dev/" target="_blank">Full Documentation</a></li>
+                    <li><a href="https://github.com/your-repo" target="_blank">GitHub Repository</a></li>
+                    <li><a href="mailto:support@example.com">Support Contact</a></li>
+                </ul>
+
+                <h3>API Status</h3>
+                <p><strong>Status:</strong> <span style="color: green;">● Operational</span></p>
+                <p><strong>Uptime:</strong> 99.9%</p>
+                <p><strong>Last Updated:</strong> <span id="current-date"></span></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 URL Shortener API. All rights reserved.</p>
+            <p>Built with ❤️ for developers</p>
+        </footer>
+    </div>
+
+    <script>
+        // Set current date
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString();
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

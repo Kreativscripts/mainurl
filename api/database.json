@@ -1,0 +1,60 @@
+{
+  "shorturl_apis": [
+    {
+      "name": "TinyURL Public",
+      "base_url": "https://tinyurl.com",
+      "endpoint": "/api-create.php",
+      "method": "GET",
+      "requires_key": false,
+      "example_request": {
+        "url": "https://example.com"
+      },
+      "example_response": "https://tinyurl.com/abcd",
+      "price": "free"
+    },
+    {
+      "name": "Shrtcode",
+      "base_url": "https://api.shrtco.de",
+      "endpoint": "/v2/shorten",
+      "method": "GET",
+      "requires_key": false,
+      "example_request": {
+        "url": "https://example.com"
+      },
+      "example_response": {
+        "result": {
+          "short_link": "https://shrtco.de/abc123"
+        }
+      },
+      "price": "free"
+    },
+    {
+      "name": "Is.gd",
+      "base_url": "https://is.gd",
+      "endpoint": "/create.php",
+      "method": "GET",
+      "requires_key": false,
+      "example_request": {
+        "url": "https://example.com"
+      },
+      "example_response": {
+        "shorturl": "https://is.gd/abc123"
+      },
+      "price": "free"
+    },
+    {
+      "name": "1pt.co",
+      "base_url": "https://api.1pt.co",
+      "endpoint": "/addURL",
+      "method": "GET",
+      "requires_key": false,
+      "example_request": {
+        "long": "https://example.com"
+      },
+      "example_response": {
+        "short": "1pt.co/abcd"
+      },
+      "price": "free"
+    }
+  ]
+}

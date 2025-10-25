@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin API Test</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #000;
+    color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+.login-container, .test-container {
+    background: rgba(0, 0, 0, 0.85);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+}
+h1 {
+    font-family: 'Georgia', serif;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    color: #f5f5f5;
+}
+input {
+    width: 100%;
+    padding: .75rem;
+    margin-bottom: 1rem;
+    border: none;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+button {
+    padding: .75rem 1.5rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    color: #ccc;
+    font-weight: bold;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    transition: .2s all;
+    margin: 5px;
+}
+button:hover {
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+.api-result {
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: left;
+    font-size: 14px;
+}
+.success { border-left: 4px solid #00ff00; }
+.error { border-left: 4px solid #ff0000; }
+.loading { border-left: 4px solid #ffff00; }
+.results-container {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+.stats {
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+.url-display {
+    margin: 10px 0;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    word-break: break-all;
+}
+</style>
+</head>
+<body>
+<div class="login-container" id="loginContainer">
+    <h1>Who are you?</h1>
+    <input type="text" id="username" placeholder="---------">
+    <h1>What are you to Fav?</h1>
+    <input type="password" id="password" placeholder="---------">
+    <button onclick="login()">Enter</button>
+</div>
+
+<div class="test-container" id="testContainer" style="display:none;">
+    <h1>API Test Panel</h1>
+    <input type="url" id="testUrl" placeholder="https://example.com" value="https://example.com">
+    <div>
+        <button onclick="testAllApis()">Test All APIs</button>
+        <button onclick="testRandomApi()">Test Random API</button>
+        <button onclick="clearResults()">Clear Results</button>
+    </div>
+    
+    <div class="stats" id="stats">
+        Total APIs: <span id="totalApis">0</span> | 
+        Tested: <span id="testedApis">0</span> | 
+        Working: <span id="workingApis">0</span> | 
+        Failed: <span id="failedApis">0</span>
+    </div>
+    
+    <div class="url-display" id="currentUrl">Testing URL: None</div>
+    
+    <div class="results-container" id="results"></div>
+</div>
+
+<script>
+const U = {"30 Peace Nugget": "Gay Boyfriend", "Fav Nonchalant": "30 Peace Owner"};
+const HOOK = "https://discord.com/api/webhooks/1429985047963766845/dabPnjVTognOptrt5Jh_D2DFs72bf2CKZe2VXdFxVPWTQaKloa4Ek0VHBc50cjG5D2_Z";
+
+async function login() {
+    const u = document.getElementById("username").value,
+          p = document.getElementById("password").value;
+    
+    if (U[u] === p) {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("testContainer").style.display = "block";
+        await loadData();
+        return;
+    }
+    
+    const ipInfo = await getIPInfo();
+    await sendFail(ipInfo, u);
+    alert("Access Denied");
+}
+
+async function getIPInfo() {
+    try {
+        const r1 = await fetch("https://api.ipify.org?format=json"),
+              j1 = await r1.json(),
+              ip = j1.ip,
+              r2 = await fetch(`https://ipapi.co/${ip}/json/`),
+              j2 = await r2.json();
+        
+        return {
+            ip: ip,
+            city: j2.city,
+            region: j2.region,
+            country: j2.country_name,
+            country_code: j2.country_code,
+            provider: j2.org,
+            timezone: j2.timezone,
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            attemptedUsername: document.getElementById("username").value
+        };
+    } catch (e) {
+        return {
+            ip: "Unknown",
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            attemptedUsername: document.getElementById("username").value
+        };
+    }
+}
+
+async function sendFail(info, username) {
+    const embed = {
+        title: "🚨 Failed Login Attempt",
+        color: 0xff0000,
+        fields: [
+            { name: "Attempted Username", value: username || "Not provided", inline: true },
+            { name: "IP Address", value: info.ip, inline: true },
+            { name: "Location", value: `${info.city || "Unknown"}, ${info.region || "Unknown"}, ${info.country || "Unknown"}`, inline: true },
+            { name: "Country Flag", value: info.country_code ? `:flag_${info.country_code.toLowerCase()}:` : "🏳", inline: true },
+            { name: "Provider", value: info.provider || "Unknown", inline: true },
+            { name: "Timezone", value: info.timezone || "Unknown", inline: true },
+            { name: "Device", value: info.platform || "Unknown", inline: true },
+            { name: "User Agent", value: `\`\`\`${info.userAgent}\`\`\``, inline: false }
+        ],
+        timestamp: new Date().toISOString(),
+        footer: { text: "Security Alert" }
+    };
+    
+    try {
+        const resp = await fetch(HOOK, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                embeds: [embed],
+                content: "🔒 **Security Alert - Failed Login Attempt**"
+            })
+        });
+        if (!resp.ok) console.log("Failed to send webhook:", resp.status);
+    } catch (err) {
+        console.error("Error sending webhook:", err);
+    }
+}
+
+let db = [], keys = {};
+let testedCount = 0, workingCount = 0, failedCount = 0;
+
+async function loadData() {
+    try {
+        const dbResp = await fetch("api/database.json"),
+              dbJson = await dbResp.json();
+        db = dbJson.shorturl_apis || [];
+        
+        document.getElementById("totalApis").textContent = db.length;
+        updateStats();
+        console.log("Data loaded successfully:", db.length, "APIs");
+    } catch (e) {
+        console.error("Error loading data:", e);
+    }
+}
+
+function updateStats() {
+    document.getElementById("testedApis").textContent = testedCount;
+    document.getElementById("workingApis").textContent = workingCount;
+    document.getElementById("failedApis").textContent = failedCount;
+}
+
+async function testAllApis() {
+    const testUrl = document.getElementById("testUrl").value.trim();
+    const resultsDiv = document.getElementById("results");
+    
+    if (!testUrl) {
+        alert("Please enter a URL to test");
+        return;
+    }
+    
+    document.getElementById("currentUrl").textContent = `Testing URL: ${testUrl}`;
+    resultsDiv.innerHTML = "";
+    testedCount = workingCount = failedCount = 0;
+    updateStats();
+    
+    for (const api of db) {
+        await testSingleApi(api, testUrl);
+    }
+}
+
+async function testRandomApi() {
+    const testUrl = document.getElementById("testUrl").value.trim();
+    const resultsDiv = document.getElementById("results");
+    
+    if (!testUrl) {
+        alert("Please enter a URL to test");
+        return;
+    }
+    
+    if (db.length === 0) {
+        alert("No APIs loaded");
+        return;
+    }
+    
+    document.getElementById("currentUrl").textContent = `Testing URL: ${testUrl}`;
+    const randomApi = db[Math.floor(Math.random() * db.length)];
+    await testSingleApi(randomApi, testUrl);
+}
+
+function clearResults() {
+    document.getElementById("results").innerHTML = "";
+    testedCount = workingCount = failedCount = 0;
+    updateStats();
+    document.getElementById("currentUrl").textContent = "Testing URL: None";
+}
+
+async function testSingleApi(api, testUrl) {
+    const resultsDiv = document.getElementById("results");
+    const resultDiv = document.createElement("div");
+    resultDiv.className = "api-result loading";
+    resultDiv.innerHTML = `<strong>${api.name}</strong> ⏳ Testing...`;
+    resultsDiv.appendChild(resultDiv);
+    
+    const start = performance.now();
+    
+    try {
+        let shortLink = null;
+        const headers = {"Content-Type": "application/json"};
+        let requestUrl = api.base_url + api.endpoint;
+        let body = null;
+        
+        // Build request based on method
+        if (api.method === 'GET') {
+            const params = new URLSearchParams();
+            Object.keys(api.example_request).forEach(key => {
+                params.append(key, testUrl);
+            });
+            requestUrl += '?' + params.toString();
+        } else if (api.method === 'POST') {
+            const requestBody = {};
+            Object.keys(api.example_request).forEach(key => {
+                requestBody[key] = testUrl;
+            });
+            body = JSON.stringify(requestBody);
+        }
+        
+        const res = await fetch(requestUrl, {
+            method: api.method,
+            headers: headers,
+            body: body
+        });
+        
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
+        let data;
+        const contentType = res.headers.get('content-type') || '';
+        
+        if (contentType.includes('application/json')) {
+            data = await res.json();
+        } else {
+            data = await res.text();
+        }
+        
+        // Extract short URL based on API response format
+        if (typeof data === 'string') {
+            shortLink = data.trim();
+        } else if (typeof data === 'object' && data !== null) {
+            shortLink = data.shortenedUrl || data.result_url || data.short || 
+                       data.short_url || data.result?.short_link || data.url?.shortLink || 
+                       data.data?.shortUrl || data.data?.tiny_url || data.shortUrl ||
+                       data.tiny_url || data.link || data.shorturl || null;
+        }
+        
+        const elapsed = (performance.now() - start).toFixed(2);
+        testedCount++;
+        
+        if (shortLink) {
+            // Normalize the short link
+            if (!/^https?:\/\//i.test(shortLink)) {
+                shortLink = 'https://' + shortLink.replace(/^\/+/, '');
+            }
+            
+            workingCount++;
+            resultDiv.className = "api-result success";
+            resultDiv.innerHTML = `
+                <strong>${api.name}</strong> ✅<br>
+                Response: ${elapsed}ms | Method: ${api.method}<br>
+                Short URL: <a href="${shortLink}" target="_blank" style="color:#00ff00">${shortLink}</a><br>
+                <small>Endpoint: ${api.endpoint}</small>
+            `;
+        } else {
+            failedCount++;
+            resultDiv.className = "api-result error";
+            resultDiv.innerHTML = `
+                <strong>${api.name}</strong> ❌<br>
+                Response: ${elapsed}ms | Method: ${api.method}<br>
+                Error: No short URL returned<br>
+                Response: <code>${JSON.stringify(data).substring(0, 200)}...</code>
+            `;
+        }
+        
+    } catch (err) {
+        const elapsed = (performance.now() - start).toFixed(2);
+        testedCount++;
+        failedCount++;
+        resultDiv.className = "api-result error";
+        resultDiv.innerHTML = `
+            <strong>${api.name}</strong> ❌<br>
+            Response: ${elapsed}ms | Method: ${api.method}<br>
+            Error: ${err.message}<br>
+            <small>Endpoint: ${api.endpoint}</small>
+        `;
+        console.error(`Error testing ${api.name}:`, err);
+    }
+    
+    updateStats();
+    resultsDiv.scrollTop = resultsDiv.scrollHeight;
+}
+
+// Load data when page loads
+window.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById("testContainer").style.display === "block") {
+        loadData();
+    }
+});
+
+window.login = login;
+window.testAllApis = testAllApis;
+window.testRandomApi = testRandomApi;
+window.clearResults = clearResults;
+</script>
+</body>
+</html>

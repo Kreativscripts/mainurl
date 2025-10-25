@@ -1,0 +1,6 @@
+{
+  "notice": "this is fake admin info",
+  "admin_user": "admin_dummy",
+  "admin_pass": "please_use_cloudflare_worker_instead",
+  "hint": "real secrets are handled by the worker; this file is a decoy"
+}
